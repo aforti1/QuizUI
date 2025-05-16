@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz by Ye</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .question-container { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
+    .question-text { font-weight: bold; margin-bottom: 10px; white-space: pre-line; }
+    .answers label { display: block; margin-bottom: 5px; cursor: pointer; }
+    .correct { background-color: #e0ffe0; }
+    .wrong { background-color: #ffe0e0; }
+    .correct-answer { margin-top: 10px; font-style: italic; }
+    #submit { padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; }
+    #result { margin-top: 20px; font-size: 18px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+  <h1>Quiz by Ye</h1>
+  <div id="quiz"></div>
+  <button id="submit">Submit</button>
+  <div id="result"></div>
+
+  <script>
+    // quiz questions, yur
+    const quizData = [
+      {
+        text: "football_df[['wins']] and football_df['wins'] have the same data type.",
+        choices: ["True", "False"],
+        correct: 1
+      },
+      {
+        text: "Assume df is a dataframe, df[3:7] will show the ___ samples.",
+        choices: ["2", "3", "4", "5"],
+        correct: 2
+      },
+      {
+        text: "try & except statement can deal with different error types separately.",
+        choices: ["True", "False"],
+        correct: 0
+      },
+	  {
+        text: "If read one empty line (not the end of file), the returned result is",
+        choices: ["None", "Empty string", "'\\n'", "Nothing"],
+        correct: 2
+      },
+	  {
+        text: "file_object.read() statement reads one line content of the file and store it as a string.",
+        choices: ["True", "False"],
+        correct: 1
+      },
+	  {
+	text: "Which file open modes can be used for writing data to a file?",
+	choices: ["w, w+, r", "w, a+, r", "w, a, r+", "w+, a, r"],
+	correct: 2
+	},
+	{
+	text: "If there are multiple errors in the code block following try, all the errors can be caught and dealt with at the same time.",
+	choices: ["True", "False"],
+	correct: 1
+	},
+	{
+	text: "Assume df is a dataframe, df.head(5) will show the first ___ samples of the dataframe.",
+	choices: ["1", "4", "6", "5"],
+	correct: 3
+	},
+	{
+	text: "In addition to describe() function to show all statistics, basic statistics operations can also be run over a dataframe individually.",
+	choices: ["True", "False"],
+	correct: 0
+	},
+	{
+	text: "The dataframe uses ___ data type to store a floating point number.",
+	choices: ["float64", "float", "float128", "float32"],
+	correct: 0
+	},
+	{
+	text: "Which of the following statistics will NOT be shown for describe() function of a dataframe.",
+	choices: ["mean", "75th Percentile", "Correlation", "max"],
+	correct: 2
+	},
+	{
+	text: "split(separator) method returns a list of strings after breaking the given string by the specified separator.",
+	choices: ["True", "False"],
+	correct: 0
+	},
+	{
+	text: "Assume x and y are two arrays defined in NumPy, what is the result after running the following code?",
+	choices: ["error", "[3, 4, 5, 6]", "[3 4 5 6]", "[3, 2, 3, 4]"],
+	correct: 2
+	},
+	{
+	text: "As to the split(separator) method, if separator is not specified or is None, __________ is/are regarded as a single separator",
+	choices: ["spaces", "consecutive space", "spaces and tabs '\\t'", "consecutive whitespace"],
+	correct: 3
+	},
+	{
+	text: `Assume x and y are two arrays defined in NumPy, what is the result after running the following code?
+
+import numpy as np
+x = np.array([1,2,3,4])
+y = np.array([4,5,6,7])
+print(x + y)`,
+	choices: ["[1,2,3,4,4,5,6,7]", "None of them", "Error", "[5  7  9 11]"],
+	correct: 3
+	},
+	{
+	text: "It is good practice to use the ______ keyword/statement when dealing with file objects. The advantage is that the file is properly closed after its suite finishes (No need to close the file using file_object.close()), even if an exception is raised at some point.",
+	choices: ["try & except", "with", "close", "open"],
+	correct: 1
+	},
+	{
+	text: "Assume a = 'Linda 85\\n', print(a.split()) will display ['Linda', '85\\n'].",
+	choices: ["True", "False"],
+	correct: 1
+	},
+	{
+  text: "Assume file reading reaches the end of the file, if the program reads one more line using file_object.readline(), the returned result is",
+  choices: ["Empty string", "Nothing", "Error", "'\\n'"],
+  correct: 0
+},
+{
+  text: "NumPy especially supports mathematical operations for:",
+  choices: ["arrays and lists", "none of them", "arrays and matrices", "lists and tuples"],
+  correct: 2
+},
+{
+  text: "The array object in NumPy is called ndarray. Here, a 2-D array is created with 1-D arrays, and a 3-D array is created with 2-D arrays.",
+  choices: ["True", "False"],
+  correct: 0
+},
+{
+  text: "split(separator) method returns a list of strings after breaking the given string by the consecutive whitespace.",
+  choices: ["True", "False"],
+  correct: 1
+},
+{
+  text: "The syntax of opening a file is:",
+  choices: [
+    "none of them",
+    "file_object.open(file_name,mode to open the file)",
+    "open.file_object(file_name,mode to open the file)",
+    "open(file_name,mode to open the file)"
+  ],
+  correct: 3
+},
+{
+  text: "Assume football_df is a dataframe defined in our lecture note, the data type of which statement is pandas.core.series.Series",
+  choices: [
+    "football_df[[wins]]",
+    "football_df[['wins']]",
+    "football_df['wins']",
+    "football_df[('wins')]"
+  ],
+  correct: 2
+},
+{
+  text: "Which statement will properly close the opened file after the code block finishes?",
+  choices: ["with statement", "try & except statement", "none of them", "open statement"],
+  correct: 0
+},
+{
+  text: "Which of the following statement will print content to a file?",
+  choices: [
+    "print(content,file_object)",
+    "print(content, file = file_object)",
+    "file_object.print(content)",
+    "content.print(file = file_object)"
+  ],
+  correct: 1
+},
+{
+  text: "If the data file and the program file are NOT in the same folder, the file path MUST be needed to open a file.",
+  choices: ["True", "False"],
+  correct: 0
+},
+{
+  text: "Which of the following methods in pandas outputs information about the DataFrame, including the column data types, non-null values, and memory usage.",
+  choices: ["info()", "head()", "summary()", "describe()"],
+  correct: 0
+},
+{
+  text: "File is dynamic and can store data somewhere in your computer or cloud.",
+  choices: ["True", "False"],
+  correct: 1
+},
+{
+  text: "pandas.DataFrame.describe() function is used to",
+  choices: [
+    "show the mean and std",
+    "show the basic information of the dataset",
+    "generate descriptive statistics",
+    "display the first 5 rows"
+  ],
+  correct: 2
+},
+{
+  text: "For KNN, if the attributes are not scaled, the distance measures may be dominated by",
+  choices: [
+    "attributes with small values",
+    "attributes with categorical values",
+    "attributes with numeric values",
+    "attributes with large values"
+  ],
+  correct: 3
+},
+{
+  text: "What is the disadvantage of the decision tree?",
+  choices: [
+    "Slow at classifying unknown records",
+    "Hard to interpret and understand the tree",
+    "Each split node can only involves one attribute",
+    "Relatively expensive to construct the tree"
+  ],
+  correct: 2
+},
+{
+  text: `For the KNN classifier, the weights, \\(w_k\\), in the following distance formula are used to:\n\n<img src="dist_formula.png" alt="KNN distance formula">`,
+  choices: [
+    "Add weights to different distance metrics",
+    "Add weights to different classes",
+    "Add weights to different samples",
+    "Add weights to different features"
+  ],
+  correct: 3
+},
+{
+  text: "As to the tuning parameter C of SVM, small C means narrower margin and large C means wider margin.",
+  choices: ["True", "False"],
+  correct: 1
+},
+{
+  text: "Gini Index, Entropy, and Misclassification error are used in Decision Tree to ___________.",
+  choices: [
+    "count the number of samples for each class",
+    "measure node impurity",
+    "calculate the accuracy",
+    "decide the number of layers"
+  ],
+  correct: 1
+},
+{
+  text: "SVMs work well with high dimensional data.",
+  choices: ["True", "False"],
+  correct: 0
+},
+{
+  text: "KNN classifier takes the majority vote of class labels among the k nearest neighbors. Thus, the classification results may not be the same when using different k.",
+  choices: ["True", "False"],
+  correct: 0
+},
+{
+  text: "KNN algorithm",
+  choices: [
+    "is a lazy learner",
+    "is an instance-based learning algorithm",
+    "all of them",
+    "has no trained model"
+  ],
+  correct: 2
+},
+{
+  text: "If k is too large, the KNN classifier is sensitive to noise points in the training data. Thus, the model is susceptible to overfitting.",
+  choices: ["True", "False"],
+  correct: 1
+},
+{
+  text: "In SVM, a hyperplane has ______ dimensions in a p dimensional space.",
+  choices: ["p", "2", "p - 1", "p + 1"],
+  correct: 2
+},
+{
+  text: "How many attributes (features) can be used at each non-leaf node in Decision Tree to split the data?",
+  choices: ["1", "2", "0", "none of them"],
+  correct: 0
+},
+{
+  text: "Assume we trained a decision tree model, whose every leaf node only contains a few samples from a single class. This tree is more likely to be ______.",
+  choices: ["Under-fitting", "Over-fitting", "None of them", "Appropriate-fitting"],
+  correct: 1
+},
+{
+  text: "The Decision Boundary of the KNN classifier is the boundary between regions of the feature space in which different target levels will be predicted. This Decision Boundary is decided by",
+  choices: ["none of them", "both training and testing data", "testing data", "training data"],
+  correct: 3
+},
+{
+  text: "The hyperplane that ___________ is called the maximum margin hyperplane.",
+  choices: [
+    "is farthest from the training observations",
+    "none of them",
+    "has least support vectors",
+    "has most support vectors"
+  ],
+  correct: 0
+},
+{
+  text: "In KNN, we may use similarity between two samples to measure their proximity. The range of similarity usually is  _______.",
+  choices: ["[-1, 0]", "none of them", "[-1, 1]", "[0, 1]"],
+  correct: 3
+},
+{
+  text: "The k-means algorithm searches for a pre-determined number of clusters within an unlabeled dataset.",
+  choices: ["True", "False"],
+  correct: 0
+},
+{
+  text: "K-means algorithm uses _______ method to find cluster centers and assign the points to clusters.",
+  choices: ["gradient descent", "exhaustive search", "none of them", "expectation–maximization"],
+  correct: 3
+},
+{
+  text: "Which of the following is not a Regression Evaluation Metric?",
+  choices: ["Mean Squared Error", "Root Mean Squared Error", "Confusion Matrix", "Mean Absolute Error"],
+  correct: 2
+},
+{
+  text: "As to the k-fold Cross-Validation Test (CVT), in total we will train ____ different classification models.",
+  choices: ["k-1", "1", "none of them", "k"],
+  correct: 3
+},
+{
+  text: "Dimension reduction includes",
+  choices: [
+    "none of them",
+    "feature extraction & feature selection",
+    "feature extraction & feature transformation",
+    "feature selection & feature transformation"
+  ],
+  correct: 3
+},
+{
+  text: "Which one of the following is NOT an advantage of the dimension reduction?",
+  choices: [
+    "Reduce the complexity of the model",
+    "Decrease the training time",
+    "Avoid underfitting",
+    "Eliminate the noise features"
+  ],
+  correct: 2
+},
+{
+  text: "k-means is limited to linear cluster boundaries.",
+  choices: ["True", "False"],
+  correct: 0
+},
+{
+  text: "Principal component analysis (PCA) is a feature selection method.",
+  choices: ["True", "False"],
+  correct: 1
+},
+{
+  text: "SpectralClustering estimator uses the graph of nearest neighbors to compute a higher-dimensional representation of the data, and then assigns labels using a k-means algorithm. It can generate non-linear cluster boundaries.",
+  choices: ["True", "False"],
+  correct: 0
+},
+{
+  text: "Mean Squared Error (MSE) is the mean of the squared errors. It \"punishes\" _______.",
+  choices: ["none of them", "average errors", "larger errors", "absolute errors"],
+  correct: 2
+},
+{
+  text: "The k-means algorithm cannot learn the number of clusters from the data.",
+  choices: ["True", "False"],
+  correct: 0
+},
+{
+  text: "Although there is no assurance that k-means will lead to the global best solution, it can obtain globally optimal result by running multiple times using different initial cluster centers.",
+  choices: ["True", "False"],
+  correct: 1
+},
+{
+  text: "Multiple Linear Regression algorithm takes k features (x1, x2, ..., xk) as k independent explanatory variables.",
+  choices: ["True", "False"],
+  correct: 0
+},
+{
+  text: "k-means can be very fast even for large numbers of samples, because it always finds the clusters quickly.",
+  choices: ["True", "False"],
+  correct: 1
+},
+{
+  text: "As to a simple linear regression model, it fits the data with a line to ______ loss functions.",
+  choices: ["Average", "None of them", "Maximize", "Minimize"],
+  correct: 3
+}
+    ];
+	// uses fisher-yates shuffle technique
+	function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+  function loadQuiz() {
+    const quizContainer = document.getElementById('quiz');
+    quizData.forEach((q, idx) => {
+      const answers = q.choices.map((text, originalIndex) => ({ text, originalIndex }));
+      shuffleArray(answers);
+
+      const container = document.createElement('div');
+      container.classList.add('question-container');
+
+      const questionText = document.createElement('div');
+      questionText.classList.add('question-text');
+      questionText.innerHTML = `${idx + 1}. ${q.text}`;
+      container.appendChild(questionText);
+
+      const answersDiv = document.createElement('div');
+      answersDiv.classList.add('answers');
+
+      answers.forEach(({ text, originalIndex }) => {
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = `question${idx}`;
+        input.value = originalIndex;
+        label.appendChild(input);
+        label.insertAdjacentHTML('beforeend', ` ${text}`);
+        answersDiv.appendChild(label);
+      });
+
+      container.appendChild(answersDiv);
+      quizContainer.appendChild(container);
+    });
+  }
+
+    function showResults() {
+      let score = 0;
+      document.querySelectorAll('.question-container').forEach((container, idx) => {
+        const selected = container.querySelector(`input[name=question${idx}]:checked`);
+        const answersDiv = container.querySelector('.answers');
+        const correctIndex = quizData[idx].correct;
+
+        if (selected && parseInt(selected.value, 10) === correctIndex) {
+          score++;
+          container.classList.add('correct');
+        } else {
+          container.classList.add('wrong');
+          const correctText = quizData[idx].choices[correctIndex];
+          const correctDiv = document.createElement('div');
+          correctDiv.classList.add('correct-answer');
+          correctDiv.textContent = `Correct answer: ${correctText}`;
+          answersDiv.appendChild(correctDiv);
+        }
+
+        container.querySelectorAll('input').forEach(input => input.disabled = true);
+      });
+
+      const percentage = Math.round((score / quizData.length) * 100);
+      let grade;
+      if (percentage >= 90) grade = 'A';
+      else if (percentage >= 80) grade = 'B';
+      else if (percentage >= 70) grade = 'C';
+      else if (percentage >= 60) grade = 'D';
+      else grade = 'F';
+
+      document.getElementById('result').textContent = `You scored ${score}/${quizData.length} (${percentage}%). Grade: ${grade}`;
+      document.getElementById('submit').disabled = true;
+    }
+
+    document.getElementById('submit').addEventListener('click', showResults);
+	shuffleArray(quizData);
+    loadQuiz();
+  </script>
+</body>
+</html>
